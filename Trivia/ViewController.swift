@@ -23,6 +23,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var outputQuestions: UILabel!
     @IBOutlet weak var userAnswer: UITextField!
     
+    //MARK: - Properties
+    
+    var questionsAndAnswers: [(question: String, answer: String)] = [
+        (question: "What is the biggest animal on Earth?", answer: "Elephant"),
+        (question: "What is the fastest animal on Earth?", answer: "Cheetah"),
+        (question: "What is the largest rodent in the world?", answer: "Capybara")
+    ]
+    var randomNumber = Int(arc4random_uniform(2))
+    
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +47,8 @@ class ViewController: UIViewController {
     
     
     //MARK: - Methods
+    
+    
 
 }
 
