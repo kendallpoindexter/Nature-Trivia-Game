@@ -61,6 +61,10 @@ class ViewController: UIViewController {
         return randomNumber
     }
     func outputRandomQ() {
+        if ViewController.questionsAndAnswers.count < 1 {
+            return
+        }
+        
         // Step 1: Recalculate randomIndex
         randomIndex = ViewController.generateRandomNumber()
         
@@ -125,7 +129,6 @@ class ViewController: UIViewController {
         
         if isAnswerCorrect() == false {
             flashRed()
-            score-=1
             wrongAnswer+=1
         }
         
@@ -149,7 +152,7 @@ class ViewController: UIViewController {
        
        
     }
-    
+
     
 
 }
