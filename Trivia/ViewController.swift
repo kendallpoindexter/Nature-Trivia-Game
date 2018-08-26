@@ -31,6 +31,7 @@ class ViewController: UIViewController {
         (question: "What is the largest rodent in the world?", answer: "Capybara"),
         (question: "What is the largest lizard on Earth", answer: "Komodo dragon")
     ]
+    var randomIndex = ViewController.generateRandomNumber()
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -51,27 +52,35 @@ class ViewController: UIViewController {
     
     //MARK: - Methods
     
+    static func generateRandomNumber() -> Int {
+        let randomNumber = Int(arc4random_uniform(UInt32(ViewController.questionsAndAnswers.count)))
+        return randomNumber
+    }
     func outputRandomQ() {
         // Step 1: Recalculate randomIndex
-        let randomIndex = Int(arc4random_uniform(UInt32(ViewController.questionsAndAnswers.count)))
+        randomIndex = ViewController.generateRandomNumber()
         
         // Step 2: Pick new QnA with randomIndex
-        let randomQnA = ViewController.questionsAndAnswers[randomIndex]
+        let randomQuestion = ViewController.questionsAndAnswers[randomIndex].question
         
-        outputQuestions.text = randomQnA.question
+        outputQuestions.text = randomQuestion
     }
     
     func removeSeenQnA() {
         // Remove the QnA that we just saw
-        ViewController.questionsAndAnswers.remove(at: <#T##Int#>)
+        ViewController.questionsAndAnswers.remove(at: randomIndex)
     }
     
     func isAnswerCorrect() -> Bool {
-        if ViewController.randomQnA.answer == userAnswer.text {
+        let answer = ViewController.questionsAndAnswers[randomIndex].answer
+        if answer == userAnswer.text {
             removeSeenQnA()
             outputRandomQ()
+            return true
+        } else {
+            return false
         }
-        return true
+       
     }
     
 
