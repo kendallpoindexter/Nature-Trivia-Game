@@ -25,18 +25,20 @@ class ViewController: UIViewController {
     
     //MARK: - Properties
     
-    var questionsAndAnswers: [(question: String, answer: String)] = [
+   static var questionsAndAnswers: [(question: String, answer: String)] = [
         (question: "What is the biggest land animal on Earth?", answer: "Elephant"),
         (question: "What is the fastest animal on Earth?", answer: "Cheetah"),
         (question: "What is the largest rodent in the world?", answer: "Capybara"),
         (question: "What is the largest lizard on Earth", answer: "Komodo dragon")
     ]
-    var randomNumber = Int(arc4random_uniform(2))
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        outputRandomQ()
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,6 +51,28 @@ class ViewController: UIViewController {
     
     //MARK: - Methods
     
+    func outputRandomQ() {
+        // Step 1: Recalculate randomIndex
+        let randomIndex = Int(arc4random_uniform(UInt32(ViewController.questionsAndAnswers.count)))
+        
+        // Step 2: Pick new QnA with randomIndex
+        let randomQnA = ViewController.questionsAndAnswers[randomIndex]
+        
+        outputQuestions.text = randomQnA.question
+    }
+    
+    func removeSeenQnA() {
+        // Remove the QnA that we just saw
+        ViewController.questionsAndAnswers.remove(at: <#T##Int#>)
+    }
+    
+    func isAnswerCorrect() -> Bool {
+        if ViewController.randomQnA.answer == userAnswer.text {
+            removeSeenQnA()
+            outputRandomQ()
+        }
+        return true
+    }
     
 
 }
