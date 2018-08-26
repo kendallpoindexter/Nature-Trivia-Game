@@ -74,6 +74,7 @@ class ViewController: UIViewController {
     func isAnswerCorrect() -> Bool {
         let answer = ViewController.questionsAndAnswers[randomIndex].answer
         if answer == userAnswer.text {
+            userAnswer.text = ""
             removeSeenQnA()
             outputRandomQ()
             return true
@@ -82,6 +83,11 @@ class ViewController: UIViewController {
         }
        
     }
+    
+    @IBAction func submitTapped(_ sender: UIButton) {
+        isAnswerCorrect()
+    }
+    
     
 
 }
