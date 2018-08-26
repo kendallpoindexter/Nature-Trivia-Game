@@ -22,6 +22,8 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var outputQuestions: UILabel!
     @IBOutlet weak var userAnswer: UITextField!
+    @IBOutlet weak var outputScore: UILabel!
+    @IBOutlet weak var disableButton: UIButton!
     
     //MARK: - Properties
     
@@ -32,6 +34,8 @@ class ViewController: UIViewController {
         (question: "What is the largest lizard on Earth", answer: "Komodo dragon")
     ]
     var randomIndex = ViewController.generateRandomNumber()
+    var score = 0
+    var wrongAnswer = 0
     
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -83,13 +87,14 @@ class ViewController: UIViewController {
     
     func updateQuestion() {
         userAnswer.text = ""
-        removeSeenQnA()
-        outputRandomQ()
+        if ViewController.questionsAndAnswers.count > 0 {
+            removeSeenQnA()
+            outputRandomQ()
+        }
         
     }
     
     func flashGreen() {
-       //UIView.animate(withDuration: 0.2, animations: {self.view.backgroundColor = UIColor.green})
         UIView.animate(withDuration: (0.5), animations: {
             self.view.backgroundColor = UIColor.green
         }, completion: { didAnimateGreen in
@@ -112,16 +117,29 @@ class ViewController: UIViewController {
     
     func notifyUserOfResults() {
         
-        if ViewController.questionsAndAnswers.count == 0 {
-            outputQuestions.text = "Perfect Score"
-        } else if isAnswerCorrect() == true {
+        
+        if isAnswerCorrect() == true {
             flashGreen()
-            outputQuestions.text = "Correct"
+            score+=1
         }
         
         if isAnswerCorrect() == false {
             flashRed()
-            outputQuestions.text = "Incorrect"
+            score-=1
+            wrongAnswer+=1
+        }
+        
+        if ViewController.questionsAndAnswers.count == 0 {
+            outputScore.text = String(score)
+        }
+        
+        if score >= 3 && ViewController.questionsAndAnswers.count == 0 {
+          outputQuestions.text = "You Win"
+            disableButton.isEnabled = false
+        
+        } else if wrongAnswer > 3 {
+            outputQuestions.text = "You Lose"
+            disableButton.isEnabled = false
         }
     }
     

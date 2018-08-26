@@ -67,8 +67,15 @@
                                     <action selector="submitTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="oOf-Hu-KsH"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSB-fi-nZW">
-                                <rect key="frame" x="262" y="245" width="97" height="58"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nSB-fi-nZW">
+                                <rect key="frame" x="262" y="245" width="97" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RPB-ex-INY">
+                                <rect key="frame" x="289" y="278" width="70" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <nil key="textColor"/>
@@ -79,7 +86,9 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="disableButton" destination="Pzp-hW-t0Y" id="Tgo-0F-LWk"/>
                         <outlet property="outputQuestions" destination="llo-bK-y7e" id="wfO-kI-Du1"/>
+                        <outlet property="outputScore" destination="RPB-ex-INY" id="lTV-Te-lQ5"/>
                         <outlet property="userAnswer" destination="EK1-PP-dWI" id="21x-Hv-lS9"/>
                     </connections>
                 </viewController>
