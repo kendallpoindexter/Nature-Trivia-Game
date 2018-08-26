@@ -84,6 +84,19 @@ class ViewController: UIViewController {
        
     }
     
+    func notifyUserOfResults() {
+        if ViewController.questionsAndAnswers.count == 0 {
+            outputQuestions.text = "Perfect Score"
+        } else if isAnswerCorrect() == true {
+            outputQuestions.text = "Correct"
+            
+        }
+        
+        if isAnswerCorrect() == false {
+            outputQuestions.text = "Incorrect"
+        }
+    }
+    
     @IBAction func submitTapped(_ sender: UIButton) {
         isAnswerCorrect()
     }
