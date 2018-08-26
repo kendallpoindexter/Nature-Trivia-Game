@@ -74,9 +74,6 @@ class ViewController: UIViewController {
     func isAnswerCorrect() -> Bool {
         let answer = ViewController.questionsAndAnswers[randomIndex].answer
         if answer == userAnswer.text {
-            userAnswer.text = ""
-            removeSeenQnA()
-            outputRandomQ()
             return true
         } else {
             return false
@@ -84,21 +81,55 @@ class ViewController: UIViewController {
        
     }
     
+    func updateQuestion() {
+        userAnswer.text = ""
+        removeSeenQnA()
+        outputRandomQ()
+        
+    }
+    
+    func flashGreen() {
+       //UIView.animate(withDuration: 0.2, animations: {self.view.backgroundColor = UIColor.green})
+        UIView.animate(withDuration: (0.5), animations: {
+            self.view.backgroundColor = UIColor.green
+        }, completion: { didAnimateGreen in
+            if didAnimateGreen == true {
+               self.view.backgroundColor = UIColor.white
+            }
+        })
+        
+    }
+    
+    func flashRed() {
+        UIView.animate(withDuration: (0.5), animations: {
+            self.view.backgroundColor = UIColor.red
+        }) { (didAnimateRed) in
+            if didAnimateRed == true {
+                self.view.backgroundColor = UIColor.white
+            }
+        }
+    }
+    
     func notifyUserOfResults() {
+        
         if ViewController.questionsAndAnswers.count == 0 {
             outputQuestions.text = "Perfect Score"
         } else if isAnswerCorrect() == true {
+            flashGreen()
             outputQuestions.text = "Correct"
-            
         }
         
         if isAnswerCorrect() == false {
+            flashRed()
             outputQuestions.text = "Incorrect"
         }
     }
     
     @IBAction func submitTapped(_ sender: UIButton) {
-        isAnswerCorrect()
+        notifyUserOfResults()
+        updateQuestion()
+       
+       
     }
     
     
