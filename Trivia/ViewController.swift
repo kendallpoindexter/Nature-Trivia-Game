@@ -8,105 +8,108 @@
 
 
 // Create a trivia game application consisting of at least 8 questions
-//If the user guesses a question correctly, the background of the app should flash green, and the user should be taken to the next question
-//If the user chooses an incorrect answer, the background of the app should flash red, and that answer should be disabled
-//If the user gets more than 3 questions wrong, the user should lose the game
-//At the end of the game, your app should show the user their score
-//The user should be able to start over when the game ends
+// If the user guesses a question correctly, the background of the app should flash green, and the user should be taken to the next question
+// If the user chooses an incorrect answer, the background of the app should flash red, and that answer should be disabled
+// If the user gets more than 3 questions wrong, the user should lose the game
+// At the end of the game, your app should show the user their score
+// The user should be able to start over when the game ends
 
 import UIKit
 
 class ViewController: UIViewController {
     
-    //MARK: - IBOutlets
-
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var outputQuestions: UILabel!
     @IBOutlet weak var userAnswer: UITextField!
     @IBOutlet weak var outputScore: UILabel!
-    @IBOutlet weak var disableButton: UIButton!
+    @IBOutlet weak var submitButton: UIButton!
     
-    //MARK: - Properties
+    // MARK: - Properties
     
-   static var questionsAndAnswers: [(question: String, answer: String)] = [
-        (question: "What is the biggest land animal on Earth?", answer: "Elephant"),
-        (question: "What is the fastest animal on Earth?", answer: "Cheetah"),
-        (question: "What is the largest rodent in the world?", answer: "Capybara"),
-        (question: "What is the largest lizard on Earth", answer: "Komodo dragon")
+    var questionsAndAnswers: [(question: String, answer: String)] = [
+        (question: "What is the biggest land animal on Earth?", answer: "elephant"),
+        (question: "What is the fastest animal on Earth?", answer: "cheetah"),
+        (question: "What is the largest rodent in the world?", answer: "capybara"),
+        (question: "What is the largest lizard on Earth", answer: "komodo dragon")
     ]
-    var randomIndex = ViewController.generateRandomNumber()
+    
+    var roundQnA: [(question: String, answer: String)] = [
+        (question: "What is the biggest land animal on Earth?", answer: "elephant"),
+        (question: "What is the fastest animal on Earth?", answer: "cheetah"),
+        (question: "What is the largest rodent in the world?", answer: "capybara"),
+        (question: "What is the largest lizard on Earth", answer: "komodo dragon")
+    ]
+    
+    var randomIndex = Int(arc4random_uniform(UInt32(4)))
     var score = 0
     var wrongAnswer = 0
     
-    //MARK: - LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         outputRandomQ()
-        
-        
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
-    //MARK: - Actions
+    // MARK: - Methods
     
-    
-    //MARK: - Methods
-    
-    static func generateRandomNumber() -> Int {
-        let randomNumber = Int(arc4random_uniform(UInt32(ViewController.questionsAndAnswers.count)))
-        return randomNumber
+    func generateRandomNumber() -> Int {
+        return Int(arc4random_uniform(UInt32(roundQnA.count)))
     }
+    
     func outputRandomQ() {
-        if ViewController.questionsAndAnswers.count < 1 {
+        if roundQnA.count < 1 {
             return
         }
         
         // Step 1: Recalculate randomIndex
-        randomIndex = ViewController.generateRandomNumber()
+        randomIndex = generateRandomNumber()
         
         // Step 2: Pick new QnA with randomIndex
-        let randomQuestion = ViewController.questionsAndAnswers[randomIndex].question
+        let randomQuestion = roundQnA[randomIndex].question
         
         outputQuestions.text = randomQuestion
     }
     
     func removeSeenQnA() {
         // Remove the QnA that we just saw
-        ViewController.questionsAndAnswers.remove(at: randomIndex)
+        roundQnA.remove(at: randomIndex)
     }
     
     func isAnswerCorrect() -> Bool {
-        let answer = ViewController.questionsAndAnswers[randomIndex].answer
-        if answer == userAnswer.text {
+        let answer = roundQnA[randomIndex].answer
+      
+        //Unwrap this optional
+        guard let unwrapUserAnswerText = userAnswer.text?.lowercased() else {
+            return false
+        }
+        
+        if answer == unwrapUserAnswerText {
             return true
         } else {
             return false
         }
-       
     }
     
     func updateQuestion() {
         userAnswer.text = ""
-        if ViewController.questionsAndAnswers.count > 0 {
+        
+        if roundQnA.count > 0 {
             removeSeenQnA()
             outputRandomQ()
+        } else {
+            return
         }
-        
     }
     
     func flashGreen() {
         UIView.animate(withDuration: (0.5), animations: {
             self.view.backgroundColor = UIColor.green
-        }, completion: { didAnimateGreen in
+        }, completion: { (didAnimateGreen) in
             if didAnimateGreen == true {
-               self.view.backgroundColor = UIColor.white
+                self.view.backgroundColor = UIColor.white
             }
         })
-        
     }
     
     func flashRed() {
@@ -120,8 +123,6 @@ class ViewController: UIViewController {
     }
     
     func notifyUserOfResults() {
-        
-        
         if isAnswerCorrect() == true {
             flashGreen()
             score+=1
@@ -132,28 +133,33 @@ class ViewController: UIViewController {
             wrongAnswer+=1
         }
         
-        if ViewController.questionsAndAnswers.count == 0 {
+        if score > 3 {
             outputScore.text = String(score)
         }
         
-        if score >= 3 && ViewController.questionsAndAnswers.count == 0 {
-          outputQuestions.text = "You Win"
-            disableButton.isEnabled = false
-        
-        } else if wrongAnswer > 3 {
+        if wrongAnswer > 3 {
             outputQuestions.text = "You Lose"
-            disableButton.isEnabled = false
+            submitButton.isEnabled = false
+        } else if score >= 3 {
+            outputQuestions.text = "You Win"
+            submitButton.isEnabled = false
         }
     }
+    
+    //MARK: - Actions
     
     @IBAction func submitTapped(_ sender: UIButton) {
         notifyUserOfResults()
         updateQuestion()
-       
-       
     }
-
     
-
+    @IBAction func resetButton(_ sender: UIButton) {
+        roundQnA = questionsAndAnswers
+        wrongAnswer = 0
+        score = 0
+        userAnswer.text = ""
+        outputScore.text = ""
+        submitButton.isEnabled = true
+        outputRandomQ()
+    }
 }
-
