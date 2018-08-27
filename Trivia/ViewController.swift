@@ -31,19 +31,28 @@ class ViewController: UIViewController {
         (question: "What is the biggest land animal on Earth?", answer: "elephant"),
         (question: "What is the fastest animal on Earth?", answer: "cheetah"),
         (question: "What is the largest rodent in the world?", answer: "capybara"),
-        (question: "What is the largest lizard on Earth", answer: "komodo dragon")
+        (question: "What is the largest lizard on Earth", answer: "komodo dragon"),
+        (question: "What is the largest marine mammal on Earth", answer: "blue whale"),
+        (question: "What is the largest fish on Earth", answer: "great white shark"),
+        (question: "What is the slowest animal on Earth", answer: "three toed sloth"),
+        (question: "What is the fastest bird on foot", answer: "ostrich")
     ]
     
     var roundQnA: [(question: String, answer: String)] = [
         (question: "What is the biggest land animal on Earth?", answer: "elephant"),
         (question: "What is the fastest animal on Earth?", answer: "cheetah"),
         (question: "What is the largest rodent in the world?", answer: "capybara"),
-        (question: "What is the largest lizard on Earth", answer: "komodo dragon")
+        (question: "What is the largest lizard on Earth", answer: "komodo dragon"),
+        (question: "What is the largest marine mammal on Earth", answer: "blue whale"),
+        (question: "What is the largest fish on Earth", answer: "great white shark"),
+        (question: "What is the slowest animal on Earth", answer: "three toed sloth"),
+        (question: "What is the fastest bird on foot", answer: "ostrich")
     ]
     
-    var randomIndex = Int(arc4random_uniform(UInt32(4)))
+    var randomIndex = 0
     var score = 0
     var wrongAnswer = 0
+    var shouldUpdateQuestion = true
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -80,7 +89,7 @@ class ViewController: UIViewController {
         let answer = roundQnA[randomIndex].answer
       
         //Unwrap this optional
-        guard let unwrapUserAnswerText = userAnswer.text?.lowercased() else {
+        guard let unwrapUserAnswerText = userAnswer.text?.lowercased().trimmingCharacters(in: .whitespaces) else {
             return false
         }
         
@@ -94,7 +103,11 @@ class ViewController: UIViewController {
     func updateQuestion() {
         userAnswer.text = ""
         
-        if roundQnA.count > 0 {
+        if shouldUpdateQuestion == false {
+            return
+        }
+        
+        if roundQnA.count > 1 {
             removeSeenQnA()
             outputRandomQ()
         } else {
@@ -133,16 +146,15 @@ class ViewController: UIViewController {
             wrongAnswer+=1
         }
         
-        if score > 3 {
-            outputScore.text = String(score)
-        }
-        
         if wrongAnswer > 3 {
             outputQuestions.text = "You Lose"
             submitButton.isEnabled = false
-        } else if score >= 3 {
+            shouldUpdateQuestion = false
+        } else if score >= 5 && roundQnA.count == 1 {
+            outputScore.text = String(score)
             outputQuestions.text = "You Win"
             submitButton.isEnabled = false
+            shouldUpdateQuestion = false
         }
     }
     
@@ -161,5 +173,6 @@ class ViewController: UIViewController {
         outputScore.text = ""
         submitButton.isEnabled = true
         outputRandomQ()
+        shouldUpdateQuestion = true
     }
 }
